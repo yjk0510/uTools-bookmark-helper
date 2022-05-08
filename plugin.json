@@ -7,6 +7,11 @@
       "code": "bookmarks-search",
       "explain": "Chrome、Edge 书签搜索",
       "cmds": ["b"]
+    },
+    {
+      "code": "bSetting",
+      "explain": "Chrome、Edge 书签搜索设置",
+      "cmds": ["bSetting"]
     }
   ]
 }
