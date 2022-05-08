@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
+const settingConfig = require('./setting.js')
 let isLocked = false
 let bookmarksDataCache = null
 const targetUrlData = []
@@ -13,7 +14,7 @@ function getBookmarks(dataDir, browser) {
   if (!profile) return []
   const bookmarkPath = path.join(dataDir, profile, 'Bookmarks')
   const bookmarksData = []
-  const icon = browser + '.png'
+  const icon = path.join(__dirname, 'assets', browser + '.png')
   try {
     const data = JSON.parse(fs.readFileSync(bookmarkPath, 'utf-8'))
     const getUrlData = (item, folder) => {
@@ -211,4 +212,5 @@ window.exports = {
       },
     },
   },
+  bSetting: { ...new settingConfig.default() },
 }

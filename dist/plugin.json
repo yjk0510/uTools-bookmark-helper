@@ -1,6 +1,6 @@
 {
   "preload": "preload.js",
-  "logo": "logo.png",
+  "logo": "./assets/logo.png",
   "platform": ["win32", "darwin"],
   "features": [
     {
