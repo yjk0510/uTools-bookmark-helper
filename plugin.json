@@ -6,10 +6,7 @@
     {
       "code": "bookmarks-search",
       "explain": "Chrome、Edge 书签搜索",
-      "cmds": [
-        "bookmarks",
-        "书签"
-      ]
+      "cmds": ["b"]
     }
   ]
 }
