@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
-const settingConfig = require('../dist/setting.js')
+const settingConfig = require('./setting.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
@@ -151,7 +151,7 @@ function getTargetData(keyword) {
     return targetUrlData
   }
   const defaultUrl = targetUrlData[0].url
-  const targetUrl = defaultUrl.replace(/{{query}}/, keyword)
+  const targetUrl = defaultUrl.replace(/{{query}}/, keyword.trim())
   return [
     {
       ...targetUrlData[0],

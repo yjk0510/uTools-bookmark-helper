@@ -4,10 +4,10 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const isProduction = process.env.NODE_ENV == 'production'
 const config = {
-  entry:  './src/index.tsx',
+  entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename:'setting.js',
+    path: path.resolve(__dirname, 'public'),
+    filename: 'setting.js',
     library: {
       type: 'commonjs',
     },
@@ -17,7 +17,6 @@ const config = {
     host: 'localhost',
   },
   plugins: [
-    
     new MiniCssExtractPlugin(),
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
@@ -44,7 +43,7 @@ const config = {
       fs: false,
     },
   },
-  target:'node'
+  target: 'node',
 }
 
 module.exports = () => {

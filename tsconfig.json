@@ -3,7 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "module": "CommonJS",
-    "outDir": "dist",
+    "outDir": "public",
     "moduleResolution": "Node",
     "target": "es5",
     "allowJs": true,
