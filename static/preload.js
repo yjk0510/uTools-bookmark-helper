@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
-const settingConfig = require('./setting.js')
+const settingConfig = require('../dist/setting.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
@@ -10,7 +10,7 @@ const bookmark_file_path = utools.dbStorage.getItem(
   `${_id}/bookmark_helper-File_Path`
 )
 let bookmarksDataCache = null
-const targetUrlData = []
+let targetUrlData = []
 function getBookmarks(dataDir, browser) {
   let bookmarkPath = ''
   if (bookmark_file_path) {
@@ -204,13 +204,23 @@ window.exports = {
       },
       search: (action, searchWord, callbackSetList) => {
         searchWord = searchWord.trim()
-        const queryStr = isLocked ? searchWord.replace(queryName, '') : ''
+        let queryStr =
+          isLocked && searchWord.includes(queryName)
+            ? searchWord.replace(queryName, '')
+            : ''
+        console.log(searchWord)
         if (queryStr) {
           return callbackSetList(
             queryMode ? getTargetData(queryStr) : getSuggestionList(queryStr)
           )
         }
-        if (!searchWord) return callbackSetList()
+        if (!searchWord) {
+          //清空筛选条件场景兼容
+          queryStr = ''
+          isLocked = false
+          targetUrlData = []
+          return callbackSetList()
+        }
         if (/\S\s+\S/.test(searchWord)) {
           const regexTexts = searchWord
             .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -245,6 +255,7 @@ window.exports = {
           queryName = itemData.title
         } else {
           isLocked = false
+          targetUrlData = []
           queryName = ''
         }
         if (isLocked) return
@@ -257,5 +268,5 @@ window.exports = {
       },
     },
   },
-  bSetting: { ...new settingConfig.default() },
+  'bookmark-setting': { ...new settingConfig.default() },
 }
