@@ -9,6 +9,17 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/component/setting/style.scss":
+/*!******************************************!*\
+  !*** ./src/component/setting/style.scss ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://my-webpack-project/./src/component/setting/style.scss?");
+
+/***/ }),
+
 /***/ "./node_modules/react-dom/cjs/react-dom.development.js":
 /*!*************************************************************!*\
   !*** ./node_modules/react-dom/cjs/react-dom.development.js ***!
@@ -104,7 +115,7 @@ eval("\n\nif (false) {} else {\n  module.exports = __webpack_require__(/*! ./cjs
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
-eval("\nvar __assign = (this && this.__assign) || function () {\n    __assign = Object.assign || function(t) {\n        for (var s, i = 1, n = arguments.length; i < n; i++) {\n            s = arguments[i];\n            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))\n                t[p] = s[p];\n        }\n        return t;\n    };\n    return __assign.apply(this, arguments);\n};\nvar _this = this;\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nvar jsx_dev_runtime_1 = __webpack_require__(/*! react/jsx-dev-runtime */ \"./node_modules/react/jsx-dev-runtime.js\");\nvar _jsxFileName = \"/Users/jack/dev/utools-tpl-bookmarks-search/src/component/setting/index.tsx\";\nvar react_1 = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n// import './style.scss'\n//TODO css modules\nvar fs_1 = __webpack_require__(/*! fs */ \"?9fba\");\nvar Setting = function (props) {\n    var nativeId = (0, react_1.useState)(utools.getNativeId())[0];\n    var _a = (0, react_1.useState)(utools.dbStorage.getItem(\"\".concat(nativeId, \"/chrome-bookmark\"))), value = _a[0], setValue = _a[1];\n    var handleClick = function (event) {\n        var result = utools.showOpenDialog({\n            title: '自定义书签文件',\n            message: '自定义书签文件',\n            properties: ['openFile', 'treatPackageAsDirectory', 'showHiddenFiles'],\n        });\n        var path = result[0];\n        if (!fs_1.default.existsSync(path)) {\n            alert('路径非法');\n            setValue('');\n            return;\n        }\n        setValue(path);\n        utools.dbStorage.setItem(\"\".concat(nativeId, \"/chrome-bookmark\"), path);\n    };\n    return ((0, jsx_dev_runtime_1.jsxDEV)(\"div\", __assign({ className: \"wrap\" }, { children: [\"\\u81EA\\u5B9A\\u4E49\\u4E66\\u7B7E\\u6587\\u4EF6\", (0, jsx_dev_runtime_1.jsxDEV)(\"input\", { placeholder: \"\\u8BF7\\u9009\\u62E9\\u4F60\\u7684\\u4E66\\u7B7E\\u6587\\u4EF6\", onClick: handleClick, value: value }, void 0, false, { fileName: _jsxFileName, lineNumber: 30, columnNumber: 7 }, _this)] }), void 0, true, { fileName: _jsxFileName, lineNumber: 27, columnNumber: 11 }, _this));\n};\nexports[\"default\"] = Setting;\n\n\n//# sourceURL=webpack://my-webpack-project/./src/component/setting/index.tsx?");
+eval("\nvar __assign = (this && this.__assign) || function () {\n    __assign = Object.assign || function(t) {\n        for (var s, i = 1, n = arguments.length; i < n; i++) {\n            s = arguments[i];\n            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))\n                t[p] = s[p];\n        }\n        return t;\n    };\n    return __assign.apply(this, arguments);\n};\nvar _this = this;\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nvar jsx_dev_runtime_1 = __webpack_require__(/*! react/jsx-dev-runtime */ \"./node_modules/react/jsx-dev-runtime.js\");\nvar _jsxFileName = \"/Users/jack/dev/utools-tpl-bookmarks-search/src/component/setting/index.tsx\";\nvar react_1 = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n__webpack_require__(/*! ./style.scss */ \"./src/component/setting/style.scss\");\nvar fs_1 = __webpack_require__(/*! fs */ \"?9fba\");\nvar Setting = function (props) {\n    var nativeId = (0, react_1.useState)(utools.getNativeId())[0];\n    var _a = (0, react_1.useState)(utools.dbStorage.getItem(\"\".concat(nativeId, \"/chrome-bookmark\"))), value = _a[0], setValue = _a[1];\n    var handleClick = function (event) {\n        var result = utools.showOpenDialog({\n            title: '自定义书签文件',\n            message: '自定义书签文件',\n            properties: ['openFile', 'treatPackageAsDirectory', 'showHiddenFiles'],\n        });\n        var path = result[0];\n        if (!fs_1.default.existsSync(path)) {\n            alert('路径非法');\n            setValue('');\n            return;\n        }\n        setValue(path);\n        utools.dbStorage.setItem(\"\".concat(nativeId, \"/chrome-bookmark\"), path);\n    };\n    return ((0, jsx_dev_runtime_1.jsxDEV)(\"div\", __assign({ className: \"wrap\" }, { children: [\"\\u81EA\\u5B9A\\u4E49\\u4E66\\u7B7E\\u6587\\u4EF6\", (0, jsx_dev_runtime_1.jsxDEV)(\"input\", { placeholder: \"\\u8BF7\\u9009\\u62E9\\u4F60\\u7684\\u4E66\\u7B7E\\u6587\\u4EF6\", onClick: handleClick, value: value }, void 0, false, { fileName: _jsxFileName, lineNumber: 29, columnNumber: 7 }, _this)] }), void 0, true, { fileName: _jsxFileName, lineNumber: 26, columnNumber: 11 }, _this));\n};\nexports[\"default\"] = Setting;\n\n\n//# sourceURL=webpack://my-webpack-project/./src/component/setting/index.tsx?");
 
 /***/ }),
 
@@ -159,6 +170,17 @@ eval("/* (ignored) */\n\n//# sourceURL=webpack://my-webpack-project/fs_(ignored)
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/node module decorator */
 /******/ 	(() => {
 /******/ 		__webpack_require__.nmd = (module) => {

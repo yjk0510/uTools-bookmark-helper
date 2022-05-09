@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-// import './style.scss'
-//TODO css modules
+import './style.scss'
 import fs from 'fs'
 interface IProps {}
 const Setting: React.FC<IProps> = (props) => {
