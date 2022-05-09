@@ -1,17 +1,28 @@
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
-const settingConfig = require('./setting.js')
+const settingConfig = require('../setting.js')
 let isLocked = false
+const _id = utools.getNativeId()
+let queryName = ''
+let queryMode = utools.dbStorage.getItem(`${_id}/bookmark_helper-Query_Mode`)
+const bookmark_file_path = utools.dbStorage.getItem(
+  `${_id}/bookmark_helper-File_Path`
+)
 let bookmarksDataCache = null
 const targetUrlData = []
 function getBookmarks(dataDir, browser) {
-  const profiles = ['Default', 'Profile 3', 'Profile 2', 'Profile 1']
-  const profile = profiles.find((profile) =>
-    fs.existsSync(path.join(dataDir, profile, 'Bookmarks'))
-  )
-  if (!profile) return []
-  const bookmarkPath = path.join(dataDir, profile, 'Bookmarks')
+  const bookmarkPath = ''
+  if (bookmark_file_path) {
+    bookmarkPath = bookmark_file_path
+  } else {
+    const profiles = ['Default', 'Profile 3', 'Profile 2', 'Profile 1']
+    const profile = profiles.find((profile) =>
+      fs.existsSync(path.join(dataDir, profile, 'Bookmarks'))
+    )
+    if (!profile) return []
+    bookmarkPath = path.join(dataDir, profile, 'Bookmarks')
+  }
   const bookmarksData = []
   const icon = path.join(__dirname, 'assets', browser + '.png')
   try {
@@ -36,15 +47,17 @@ function getBookmarks(dataDir, browser) {
     getUrlData(data.roots.bookmark_bar, '')
     getUrlData(data.roots.other, '')
     getUrlData(data.roots.synced, '')
-  } catch (e) {}
+  } catch (e) {
+    alert(e)
+  }
   console.log(bookmarksData)
   return bookmarksData
 }
 
 /**
- * 使用浏览器打开指定地址
- * @param {链接} url 
- * @returns 
+ * 使用chrome浏览器打开指定地址
+ * @param {链接} url
+ * @returns
  */
 function openUrlByChrome(url) {
   if (process.platform === 'win32') {
@@ -75,6 +88,11 @@ function openUrlByChrome(url) {
   }
 }
 
+/**
+ * Edge浏览器打开指定地址
+ * @param {链接} url
+ * @returns
+ */
 function openUrlByEdge(url) {
   if (process.platform === 'win32') {
     const args = [
@@ -127,6 +145,21 @@ function getSuggestionList(keyword) {
     })
   return suggestionList
 }
+//获取目标结果
+function getTargetData(keyword) {
+  if (!keyword) {
+    return targetUrlData
+  }
+  const defaultUrl = targetUrlData[0].url
+  const targetUrl = defaultUrl.replace(/{{query}}/, keyword)
+  return [
+    {
+      ...targetUrlData[0],
+      url: targetUrl,
+      description: targetUrlData[0].description.replace(defaultUrl, targetUrl),
+    },
+  ]
+}
 window.exports = {
   'bookmarks-search': {
     mode: 'list',
@@ -171,9 +204,11 @@ window.exports = {
       },
       search: (action, searchWord, callbackSetList) => {
         searchWord = searchWord.trim()
-        const keyword = searchWord.split(' ')[1]
-        if (isLocked && keyword) {
-          return callbackSetList(getSuggestionList(keyword))
+        const queryStr = isLocked ? searchWord.replace(queryName, '') : ''
+        if (queryStr) {
+          return callbackSetList(
+            queryMode ? getTargetData(queryStr) : getSuggestionList(queryStr)
+          )
         }
         if (!searchWord) return callbackSetList()
         if (/\S\s+\S/.test(searchWord)) {
@@ -203,9 +238,15 @@ window.exports = {
       select: (action, itemData) => {
         console.log(itemData)
         activeUrl = itemData.url
-        isLocked = !isLocked
-        targetUrlData.push(itemData)
-        utools.setSubInputValue(`${itemData.title} `)
+        if (queryMode && /{{query}}/.test(activeUrl)) {
+          isLocked = true
+          targetUrlData.push(itemData)
+          utools.setSubInputValue(`${itemData.title} `)
+          queryName = itemData.title
+        } else {
+          isLocked = false
+          queryName = ''
+        }
         if (isLocked) return
         if (itemData.browser === 'chrome') {
           openUrlByChrome(itemData.url)
