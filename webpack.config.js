@@ -53,6 +53,7 @@ const config = {
       fs: false,
     },
   },
+  target:'node'
 }
 
 module.exports = () => {
