@@ -5,7 +5,6 @@ const settingConfig = require('./setting.js')
 let isLocked = false
 let bookmarksDataCache = null
 const targetUrlData = []
-let activeUrl = ''
 function getBookmarks(dataDir, browser) {
   const profiles = ['Default', 'Profile 3', 'Profile 2', 'Profile 1']
   const profile = profiles.find((profile) =>
