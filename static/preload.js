@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
-const settingConfig = require('../setting.js')
+const settingConfig = require('./setting.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
@@ -12,7 +12,7 @@ const bookmark_file_path = utools.dbStorage.getItem(
 let bookmarksDataCache = null
 const targetUrlData = []
 function getBookmarks(dataDir, browser) {
-  const bookmarkPath = ''
+  let bookmarkPath = ''
   if (bookmark_file_path) {
     bookmarkPath = bookmark_file_path
   } else {
@@ -48,7 +48,7 @@ function getBookmarks(dataDir, browser) {
     getUrlData(data.roots.other, '')
     getUrlData(data.roots.synced, '')
   } catch (e) {
-    alert(e)
+    alert(`请重新选择书签文件,错误信息：${e}`)
   }
   console.log(bookmarksData)
   return bookmarksData
