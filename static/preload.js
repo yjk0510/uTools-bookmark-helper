@@ -41,6 +41,11 @@ function getBookmarks(dataDir, browser) {
   return bookmarksData
 }
 
+/**
+ * 使用浏览器打开指定地址
+ * @param {链接} url 
+ * @returns 
+ */
 function openUrlByChrome(url) {
   if (process.platform === 'win32') {
     const suffix = `${path.sep}Google${path.sep}Chrome${path.sep}Application${path.sep}chrome.exe`

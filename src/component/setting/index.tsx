@@ -1,5 +1,14 @@
 import React, { useState } from 'react'
-import './style.scss'
+import styled from 'styled-components'
+const Wrap=styled.div`
+  padding:20px;
+  input{
+    width:450px;
+    height:28px;
+    margin-left:8px;
+    border-radius: 4px;
+  }
+`
 import fs from 'fs'
 interface IProps {}
 const Setting: React.FC<IProps> = (props) => {
@@ -9,8 +18,8 @@ const Setting: React.FC<IProps> = (props) => {
   )
   const handleClick = (event: any) => {
     let result = utools.showOpenDialog({
-      title: '自定义书签文件',
-      message: '自定义书签文件',
+      title: '选择书签文件',
+      message: '选择书签文件',
       properties: ['openFile', 'treatPackageAsDirectory', 'showHiddenFiles'],
     })
 
@@ -24,14 +33,14 @@ const Setting: React.FC<IProps> = (props) => {
     utools.dbStorage.setItem(`${nativeId}/chrome-bookmark`, path)
   }
   return (
-    <div className="wrap">
+    <Wrap>
       自定义书签文件
       <input
         placeholder="请选择你的书签文件"
         onClick={handleClick}
         value={value}
       />
-    </div>
+    </Wrap>
   )
 }
 

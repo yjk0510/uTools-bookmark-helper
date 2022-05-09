@@ -7,7 +7,7 @@ class SettingFeature {
     this.mode = 'none'
     this.args = {
       enter: () => {
-        utools.setExpendHeight(200)
+        utools.setExpendHeight(600)
         render(<Setting />, document.body)
       },
     }
