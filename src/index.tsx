@@ -3,6 +3,7 @@ import Setting from './component/setting/index'
 class SettingFeature {
   mode: 'none' | 'list'
   args: any
+  placeholder: string
   constructor() {
     this.mode = 'none'
     this.args = {

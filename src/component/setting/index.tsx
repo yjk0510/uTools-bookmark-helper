@@ -16,12 +16,9 @@ const Item = styled.div`
 const ItemContent = styled.div``
 const Radio = styled.input``
 const fs = require('fs')
-import { BookMark_File_Path, Enable_Query_Mode } from '../../const'
+import { BookMark_File_Path } from '../../const'
 interface IProps {}
 const Setting: React.FC<IProps> = (props) => {
-  const [queryMode, setQueryMode] = useState(
-    utools.dbStorage.getItem(Enable_Query_Mode)
-  )
   const [value, setValue] = useState(
     utools.dbStorage.getItem(BookMark_File_Path)
   )
@@ -41,11 +38,6 @@ const Setting: React.FC<IProps> = (props) => {
     setValue(path)
     utools.dbStorage.setItem(BookMark_File_Path, path)
   }
-  const handleQueryModeChange = (event: any) => {
-    const enableQueryMode = event.target.value === '1'
-    setQueryMode(enableQueryMode)
-    utools.dbStorage.setItem(Enable_Query_Mode, enableQueryMode)
-  }
   return (
     <Wrap>
       <Item>
@@ -56,27 +48,6 @@ const Setting: React.FC<IProps> = (props) => {
             onClick={handleClick}
             value={value}
           />
-        </ItemContent>
-      </Item>
-      <Item>
-        启用Query模式，需要在书签地址中指定{`{{query}}`}占位
-        <ItemContent>
-          <Radio
-            type="radio"
-            name="query"
-            value={1}
-            checked={queryMode}
-            onChange={handleQueryModeChange}
-          />
-          <label htmlFor="dewey">是</label>
-          <Radio
-            type="radio"
-            name="query"
-            value={0}
-            checked={!queryMode}
-            onChange={handleQueryModeChange}
-          />
-          <label htmlFor="dewey">否</label>
         </ItemContent>
       </Item>
     </Wrap>

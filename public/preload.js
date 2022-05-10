@@ -5,7 +5,6 @@ const settingConfig = require('./setting.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
-let queryMode = utools.dbStorage.getItem(`${_id}/bookmark_helper-Query_Mode`)
 const bookmark_file_path = utools.dbStorage.getItem(
   `${_id}/bookmark_helper-File_Path`
 )
@@ -201,6 +200,7 @@ window.exports = {
             (a, b) => a.addAt - b.addAt
           )
         }
+        callbackSetList(bookmarksDataCache)
       },
       search: (action, searchWord, callbackSetList) => {
         searchWord = searchWord.trim()
@@ -210,9 +210,7 @@ window.exports = {
             : ''
         console.log(searchWord)
         if (queryStr) {
-          return callbackSetList(
-            queryMode ? getTargetData(queryStr) : getSuggestionList(queryStr)
-          )
+          return callbackSetList(getTargetData(queryStr))
         }
         if (!searchWord) {
           //清空筛选条件场景兼容
@@ -248,7 +246,7 @@ window.exports = {
       select: (action, itemData) => {
         console.log(itemData)
         activeUrl = itemData.url
-        if (queryMode && /{{query}}/.test(activeUrl)) {
+        if (/{{query}}/.test(activeUrl)) {
           isLocked = true
           targetUrlData.push(itemData)
           utools.setSubInputValue(`${itemData.title} `)
@@ -266,6 +264,7 @@ window.exports = {
         }
         window.utools.outPlugin()
       },
+      placeholder: '输入关键字，检索书签',
     },
   },
   'bookmark-setting': { ...new settingConfig.default() },
