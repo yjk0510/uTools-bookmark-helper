@@ -1,17 +1,17 @@
 {
   "preload": "preload.js",
-  "logo": "logo.png",
+  "logo": "./assets/logo.png",
   "platform": ["win32", "darwin"],
   "features": [
     {
       "code": "bookmarks-search",
       "explain": "Chrome、Edge 书签搜索",
-      "cmds": ["b"]
+      "cmds": ["bookmark"]
     },
     {
-      "code": "bSetting",
+      "code": "bookmark-setting",
       "explain": "Chrome、Edge 书签搜索设置",
-      "cmds": ["bSetting"]
+      "cmds": ["Setting"]
     }
   ]
 }

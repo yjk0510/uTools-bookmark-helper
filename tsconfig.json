@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": true,
+    "module": "CommonJS",
+    "outDir": "public",
+    "moduleResolution": "Node",
+    "target": "es5",
+    "allowJs": true,
+    "jsx": "react-jsxdev",
+    "types": ["@types/node", "utools-api-types"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "files": ["src/index.tsx"]
+}

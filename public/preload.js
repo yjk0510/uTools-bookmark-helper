@@ -1,19 +1,29 @@
 const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
+const settingConfig = require('./setting.js')
 let isLocked = false
+const _id = utools.getNativeId()
+let queryName = ''
+const bookmark_file_path = utools.dbStorage.getItem(
+  `${_id}/bookmark_helper-File_Path`
+)
 let bookmarksDataCache = null
-const targetUrlData = []
-let activeUrl = ''
+let targetUrlData = []
 function getBookmarks(dataDir, browser) {
-  const profiles = ['Default', 'Profile 3', 'Profile 2', 'Profile 1']
-  const profile = profiles.find((profile) =>
-    fs.existsSync(path.join(dataDir, profile, 'Bookmarks'))
-  )
-  if (!profile) return []
-  const bookmarkPath = path.join(dataDir, profile, 'Bookmarks')
+  let bookmarkPath = ''
+  if (bookmark_file_path) {
+    bookmarkPath = bookmark_file_path
+  } else {
+    const profiles = ['Default', 'Profile 3', 'Profile 2', 'Profile 1']
+    const profile = profiles.find((profile) =>
+      fs.existsSync(path.join(dataDir, profile, 'Bookmarks'))
+    )
+    if (!profile) return []
+    bookmarkPath = path.join(dataDir, profile, 'Bookmarks')
+  }
   const bookmarksData = []
-  const icon = browser + '.png'
+  const icon = path.join(__dirname, 'assets', browser + '.png')
   try {
     const data = JSON.parse(fs.readFileSync(bookmarkPath, 'utf-8'))
     const getUrlData = (item, folder) => {
@@ -36,11 +46,18 @@ function getBookmarks(dataDir, browser) {
     getUrlData(data.roots.bookmark_bar, '')
     getUrlData(data.roots.other, '')
     getUrlData(data.roots.synced, '')
-  } catch (e) {}
+  } catch (e) {
+    alert(`请重新选择书签文件,错误信息：${e}`)
+  }
   console.log(bookmarksData)
   return bookmarksData
 }
 
+/**
+ * 使用chrome浏览器打开指定地址
+ * @param {链接} url
+ * @returns
+ */
 function openUrlByChrome(url) {
   if (process.platform === 'win32') {
     const suffix = `${path.sep}Google${path.sep}Chrome${path.sep}Application${path.sep}chrome.exe`
@@ -70,6 +87,11 @@ function openUrlByChrome(url) {
   }
 }
 
+/**
+ * Edge浏览器打开指定地址
+ * @param {链接} url
+ * @returns
+ */
 function openUrlByEdge(url) {
   if (process.platform === 'win32') {
     const args = [
@@ -122,6 +144,21 @@ function getSuggestionList(keyword) {
     })
   return suggestionList
 }
+//获取目标结果
+function getTargetData(keyword) {
+  if (!keyword) {
+    return targetUrlData
+  }
+  const defaultUrl = targetUrlData[0].url
+  const targetUrl = defaultUrl.replace(/{{query}}/, keyword.trim())
+  return [
+    {
+      ...targetUrlData[0],
+      url: targetUrl,
+      description: targetUrlData[0].description.replace(defaultUrl, targetUrl),
+    },
+  ]
+}
 window.exports = {
   'bookmarks-search': {
     mode: 'list',
@@ -163,14 +200,25 @@ window.exports = {
             (a, b) => a.addAt - b.addAt
           )
         }
+        callbackSetList(bookmarksDataCache)
       },
       search: (action, searchWord, callbackSetList) => {
         searchWord = searchWord.trim()
-        const keyword = searchWord.split(' ')[1]
-        if (isLocked && keyword) {
-          return callbackSetList(getSuggestionList(keyword))
+        let queryStr =
+          isLocked && searchWord.includes(queryName)
+            ? searchWord.replace(queryName, '')
+            : ''
+        console.log(searchWord)
+        if (queryStr) {
+          return callbackSetList(getTargetData(queryStr))
         }
-        if (!searchWord) return callbackSetList()
+        if (!searchWord) {
+          //清空筛选条件场景兼容
+          queryStr = ''
+          isLocked = false
+          targetUrlData = []
+          return callbackSetList()
+        }
         if (/\S\s+\S/.test(searchWord)) {
           const regexTexts = searchWord
             .replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
@@ -198,9 +246,16 @@ window.exports = {
       select: (action, itemData) => {
         console.log(itemData)
         activeUrl = itemData.url
-        isLocked = !isLocked
-        targetUrlData.push(itemData)
-        utools.setSubInputValue(`${itemData.title} `)
+        if (/{{query}}/.test(activeUrl)) {
+          isLocked = true
+          targetUrlData.push(itemData)
+          utools.setSubInputValue(`${itemData.title} `)
+          queryName = itemData.title
+        } else {
+          isLocked = false
+          targetUrlData = []
+          queryName = ''
+        }
         if (isLocked) return
         if (itemData.browser === 'chrome') {
           openUrlByChrome(itemData.url)
@@ -209,6 +264,8 @@ window.exports = {
         }
         window.utools.outPlugin()
       },
+      placeholder: '输入关键字，检索书签',
     },
   },
+  'bookmark-setting': { ...new settingConfig.default() },
 }
