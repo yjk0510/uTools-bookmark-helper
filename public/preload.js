@@ -139,6 +139,7 @@ window.exports = {
         bookmarksDataCache = []
         let chromeDataDir
         let edgeDataDir
+
         if (process.platform === 'win32') {
           chromeDataDir = path.join(
             process.env.LOCALAPPDATA,

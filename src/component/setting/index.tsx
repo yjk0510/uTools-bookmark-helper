@@ -76,21 +76,25 @@ const Setting: React.FC<IProps> = (props) => {
   }
 
   return (
-    <Wrap id="setting">
-      <Item>
-        自定义书签文件
-        <ItemContent>
-          <Input
-            placeholder="请选择你的书签文件"
-            onClick={handleClick}
-            value={value}
-          />
-        </ItemContent>
-      </Item>
-      <ButtonGroup>
-        <SubmitButton onClick={handleQuit}>设置完成</SubmitButton>
-      </ButtonGroup>
-    </Wrap>
+    <>
+      {/*保留uTools节点，保证视图正常切换 */}
+      <div id="root"></div>
+      <Wrap id="setting">
+        <Item>
+          自定义书签文件
+          <ItemContent>
+            <Input
+              placeholder="请选择你的书签文件"
+              onClick={handleClick}
+              value={value}
+            />
+          </ItemContent>
+        </Item>
+        <ButtonGroup>
+          <SubmitButton onClick={handleQuit}>设置完成</SubmitButton>
+        </ButtonGroup>
+      </Wrap>
+    </>
   )
 }
 
