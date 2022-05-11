@@ -23,7 +23,7 @@ function getBookmarks(dataDir, browser) {
     bookmarkPath = path.join(dataDir, profile, 'Bookmarks')
   }
   const bookmarksData = []
-  const icon = path.join(__dirname, 'assets', browser + '.png')
+  const icon = path.join('assets', browser + '.png')
   try {
     const data = JSON.parse(fs.readFileSync(bookmarkPath, 'utf-8'))
     const getUrlData = (item, folder) => {
@@ -115,35 +115,7 @@ function openUrlByEdge(url) {
     }
   }
 }
-//获取建议结果
-function getSuggestionList(keyword) {
-  const suggestionList = []
-  const defaultUrl = targetUrlData[0].url
-  defaultUrl
-    .split(/\/\/|\/|\?|&/)
-    .slice(2)
-    .forEach((item) => {
-      let re = '',
-        suggestionUrl
-      const regSource = item.split('=')
-      if (regSource.length > 1) {
-        re = new RegExp(`(${regSource[0]})=${regSource[1]}`)
-        suggestionUrl = defaultUrl.replace(re, `$1=${keyword}`)
-      } else {
-        re = new RegExp(regSource[0])
-        suggestionUrl = defaultUrl.replace(re, keyword)
-      }
-      suggestionList.push({
-        ...targetUrlData[0],
-        url: suggestionUrl,
-        description: targetUrlData[0].description.replace(
-          defaultUrl,
-          suggestionUrl
-        ),
-      })
-    })
-  return suggestionList
-}
+
 //获取目标结果
 function getTargetData(keyword) {
   if (!keyword) {
@@ -172,18 +144,10 @@ window.exports = {
             process.env.LOCALAPPDATA,
             'Google/Chrome/User Data'
           )
-          edgeDataDir = path.join(
-            process.env.LOCALAPPDATA,
-            'Microsoft/Edge/User Data'
-          )
         } else if (process.platform === 'darwin') {
           chromeDataDir = path.join(
             window.utools.getPath('appData'),
             'Google/Chrome'
-          )
-          edgeDataDir = path.join(
-            window.utools.getPath('appData'),
-            'Microsoft Edge'
           )
         } else {
           return
@@ -192,9 +156,7 @@ window.exports = {
           console.log(chromeDataDir)
           bookmarksDataCache.push(...getBookmarks(chromeDataDir, 'chrome'))
         }
-        if (fs.existsSync(edgeDataDir)) {
-          bookmarksDataCache.push(...getBookmarks(edgeDataDir, 'edge'))
-        }
+
         if (bookmarksDataCache.length > 0) {
           bookmarksDataCache = bookmarksDataCache.sort(
             (a, b) => a.addAt - b.addAt
