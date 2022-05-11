@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 const Wrap = styled.div`
   padding: 20px;
@@ -7,11 +7,44 @@ const Input = styled.input`
   width: 450px;
   height: 28px;
   border-radius: 4px;
+  border: 1px solid #eee;
+  margin-top: 10px;
+  width: 100%;
 `
 const Item = styled.div`
   margin-bottom: 10px;
   display: flex;
   flex-direction: column;
+`
+const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+  justify-content: center;
+`
+const Button = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 3px;
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12px;
+  line-height: 20px;
+`
+const SubmitButton = styled(Button)`
+  color: #fff;
+  background-color: #1d86f0;
+  min-width: 120px;
+`
+const CancelButton = styled(Button)`
+  color: #33383d;
+  border: 1px solid #e6e8eb;
+  background-color: #fff;
+  margin-right: 10px;
 `
 const ItemContent = styled.div``
 const Radio = styled.input``
@@ -38,8 +71,12 @@ const Setting: React.FC<IProps> = (props) => {
     setValue(path)
     utools.dbStorage.setItem(BookMark_File_Path, path)
   }
+  const handleQuit = () => {
+    utools.redirect('bookmark', '')
+  }
+
   return (
-    <Wrap>
+    <Wrap id="setting">
       <Item>
         自定义书签文件
         <ItemContent>
@@ -50,6 +87,9 @@ const Setting: React.FC<IProps> = (props) => {
           />
         </ItemContent>
       </Item>
+      <ButtonGroup>
+        <SubmitButton onClick={handleQuit}>设置完成</SubmitButton>
+      </ButtonGroup>
     </Wrap>
   )
 }
