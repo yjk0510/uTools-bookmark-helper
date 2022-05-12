@@ -77,9 +77,7 @@ const Setting: React.FC<IProps> = (props) => {
 
   return (
     <>
-      {/*保留uTools节点，保证视图正常切换 */}
-      <div id="root"></div>
-      <Wrap id="setting">
+      <Wrap>
         <Item>
           自定义书签文件
           <ItemContent>
@@ -94,6 +92,7 @@ const Setting: React.FC<IProps> = (props) => {
           <SubmitButton onClick={handleQuit}>设置完成</SubmitButton>
         </ButtonGroup>
       </Wrap>
+      <script src="index.js"></script>
     </>
   )
 }

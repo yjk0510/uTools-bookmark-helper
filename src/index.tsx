@@ -1,5 +1,6 @@
-import { render, unmountComponentAtNode } from 'react-dom'
+import { render, hydrate, unmountComponentAtNode } from 'react-dom'
 import Setting from './component/setting/index'
+
 class SettingFeature {
   mode: 'none' | 'list'
   args: any
@@ -9,10 +10,14 @@ class SettingFeature {
     this.args = {
       enter: () => {
         utools.setExpendHeight(200)
-        render(<Setting />, document.body)
+        //不能直接挂到body,会影响utools视图切换逻辑
+        const app = document.createElement('div')
+        app.id = 'setting_root'
+        document.body.append(app)
+        render(<Setting />, app)
         utools.onPluginOut(() => {
           //隐藏设置视图
-          document.getElementById('setting')?.remove()
+          unmountComponentAtNode(app)
           //不回uTools js文件，实现视图正常切换
           var head = document.getElementsByTagName('head')[0]
           var script = document.createElement('script')
