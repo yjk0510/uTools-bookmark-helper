@@ -15,16 +15,6 @@ class SettingFeature {
         app.id = 'setting_root'
         document.body.append(app)
         render(<Setting />, app)
-        utools.onPluginOut(() => {
-          //隐藏设置视图
-          unmountComponentAtNode(app)
-          //不回uTools js文件，实现视图正常切换
-          var head = document.getElementsByTagName('head')[0]
-          var script = document.createElement('script')
-          script.type = 'text/javascript'
-          script.src = 'index.js'
-          head.appendChild(script)
-        })
       },
     }
   }
