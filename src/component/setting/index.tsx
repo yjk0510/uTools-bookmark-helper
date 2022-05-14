@@ -40,15 +40,9 @@ const SubmitButton = styled(Button)`
   background-color: #1d86f0;
   min-width: 120px;
 `
-const CancelButton = styled(Button)`
-  color: #33383d;
-  border: 1px solid #e6e8eb;
-  background-color: #fff;
-  margin-right: 10px;
-`
+
 const ItemContent = styled.div``
-const Radio = styled.input``
-const fs = require('fs')
+import fs from 'fs'
 import { BookMark_File_Path } from '../../const'
 interface IProps {}
 const Setting: React.FC<IProps> = (props) => {

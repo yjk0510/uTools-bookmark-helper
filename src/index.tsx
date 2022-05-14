@@ -1,10 +1,10 @@
-import { render, hydrate, unmountComponentAtNode } from 'react-dom'
+import { createRoot } from 'react-dom/client'
+import React from 'react'
 import Setting from './component/setting/index'
-
-class SettingFeature {
+import { IFeature } from './interface'
+class SettingFeature implements IFeature{
   mode: 'none' | 'list'
   args: any
-  placeholder: string
   constructor() {
     this.mode = 'none'
     this.args = {
@@ -14,7 +14,8 @@ class SettingFeature {
         const app = document.createElement('div')
         app.id = 'setting_root'
         document.body.append(app)
-        render(<Setting />, app)
+        const root =createRoot(app)
+        root.render(<Setting />)
       },
     }
   }

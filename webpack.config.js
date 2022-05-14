@@ -6,8 +6,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'setting.js',
-    library: {
-      type: 'commonjs',
+    library:{
+      type:'commonjs',
     },
   },
   module: {
@@ -16,11 +16,7 @@ const config = {
         test: /\.(ts|tsx)$/i,
         loader: 'ts-loader',
         exclude: ['/node_modules/'],
-      },
-      {
-        test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-        type: 'asset',
-      },
+      }
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
@@ -28,9 +24,7 @@ const config = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    fallback: {
-      fs: false,
-    },
+    
   },
   target: 'node',
 }
