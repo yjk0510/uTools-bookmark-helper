@@ -6,8 +6,8 @@ const config = {
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'setting.js',
-    library:{
-      type:'commonjs',
+    library: {
+      type: 'commonjs',
     },
   },
   module: {
@@ -16,7 +16,7 @@ const config = {
         test: /\.(ts|tsx)$/i,
         loader: 'ts-loader',
         exclude: ['/node_modules/'],
-      }
+      },
 
       // Add your rules for custom modules here
       // Learn more about loaders from https://webpack.js.org/loaders/
@@ -24,7 +24,9 @@ const config = {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
-    
+    alias: {
+      '@mui/styled-engine': '@mui/styled-engine-sc',
+    },
   },
   target: 'node',
 }
@@ -32,7 +34,6 @@ const config = {
 module.exports = () => {
   if (isProduction) {
     config.mode = 'production'
-
   } else {
     config.mode = 'development'
   }

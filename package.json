@@ -6,7 +6,8 @@
   "scripts": {
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "start": "webpack --mode=development -w"
+    "start": "webpack --mode=development -w",
+    "dev": "webpack serve --config=webpack.config.dev.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "@types/react-dom": "^18.0.3",
     "@types/styled-components": "^5.1.25",
     "@webpack-cli/generators": "^2.4.2",
+    "html-webpack-plugin": "^5.5.0",
     "prettier": "^2.6.2",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.4",
@@ -34,6 +36,8 @@
     "webpack-dev-server": "^4.9.0"
   },
   "dependencies": {
+    "@mui/material": "^5.7.0",
+    "@mui/styled-engine-sc": "^5.7.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "styled-components": "^5.3.5"
