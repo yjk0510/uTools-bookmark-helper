@@ -140,7 +140,8 @@ window.exports = {
         let chromeDataDir
         let edgeDataDir
         //移除设置页面内容
-        document.getElementById('setting_root')&&document.getElementById('setting_root').remove()
+        document.getElementById('setting_root') &&
+          document.getElementById('setting_root').remove()
         if (process.platform === 'win32') {
           chromeDataDir = path.join(
             process.env.LOCALAPPDATA,
