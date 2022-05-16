@@ -122,7 +122,7 @@ function getTargetData(keyword) {
     return targetUrlData
   }
   const defaultUrl = targetUrlData[0].url
-  const targetUrl = defaultUrl.replace(/{{query}}/, keyword.trim())
+  const targetUrl = decodeURIComponent(defaultUrl).replace(/{{query}}/g, keyword.trim())
   return [
     {
       ...targetUrlData[0],
@@ -210,7 +210,7 @@ window.exports = {
       },
       select: (action, itemData) => {
         console.log(itemData)
-        activeUrl = itemData.url
+        activeUrl = decodeURIComponent(itemData.url)
         if (/{{query}}/.test(activeUrl)) {
           isLocked = true
           targetUrlData.push(itemData)
