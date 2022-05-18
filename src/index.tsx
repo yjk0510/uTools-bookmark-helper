@@ -10,6 +10,7 @@ class SettingFeature implements IFeature {
     this.args = {
       enter: () => {
         utools.setExpendHeight(300)
+        document.getElementById('setting_root')&&document.getElementById('setting_root').remove()
         //不能直接挂到body,会影响utools视图切换逻辑
         const app = document.createElement('div')
         app.id = 'setting_root'

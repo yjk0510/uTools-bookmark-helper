@@ -215,7 +215,7 @@ window.exports = {
           isLocked = true
           targetUrlData.push(itemData)
           utools.setSubInputValue(`${itemData.title} `)
-          queryName = itemData.title
+          queryName = itemData.title.trim()
         } else {
           isLocked = false
           targetUrlData = []
