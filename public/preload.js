@@ -2,6 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
 const settingConfig = require('./setting.js')
+const  PinyinHelper =require('pinyin4js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
@@ -30,6 +31,8 @@ function getBookmarks(dataDir, browser) {
       if (!item || !Array.isArray(item.children)) return
       item.children.forEach((c) => {
         if (c.type === 'url') {
+          const pinyin_name=PinyinHelper.convertToPinyinString(c.name||'', '', PinyinHelper.WITHOUT_TONE)
+          const pinyin_name_f=PinyinHelper.getShortPinyin(c.name||'')
           bookmarksData.push({
             addAt: parseInt(c.date_added),
             title: c.name || '',
@@ -37,6 +40,7 @@ function getBookmarks(dataDir, browser) {
             url: c.url,
             browser,
             icon,
+            pinyin:[pinyin_name,pinyin_name_f]
           })
         } else if (c.type === 'folder') {
           getUrlData(c, folder ? folder + ' - ' + c.name : c.name)
@@ -201,9 +205,11 @@ window.exports = {
           const searchRegex = new RegExp(regexText, 'i')
           return callbackSetList(
             bookmarksDataCache.filter(
-              (x) =>
-                x.title.search(searchRegex) !== -1 ||
-                x.description.search(searchRegex) !== -1
+              (x) =>{
+                // console.log(x.pinyin)
+                // console.log(x.pinyin.includes(regexText),regexText)
+                return x.title.search(searchRegex) !== -1 ||
+                x.description.search(searchRegex) !== -1||x.pinyin.some(i=>i.includes(regexText))}
             )
           )
         }
