@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
 const settingConfig = require('./setting.js')
-const  PinyinHelper =require('./lib/pinyin4js/index.js')
+const  { match } =require('./lib/pinyin-pro/dist/index.cjs.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
@@ -31,16 +31,13 @@ function getBookmarks(dataDir, browser) {
       if (!item || !Array.isArray(item.children)) return
       item.children.forEach((c) => {
         if (c.type === 'url') {
-          const pinyin_name=PinyinHelper.convertToPinyinString(c.name||'', '', PinyinHelper.WITHOUT_TONE)
-          const pinyin_name_f=PinyinHelper.getShortPinyin(c.name||'')
           bookmarksData.push({
             addAt: parseInt(c.date_added),
             title: c.name || '',
             description: (folder ? '「' + folder + '」' : '') + c.url,
             url: c.url,
             browser,
-            icon,
-            pinyin:[pinyin_name,pinyin_name_f]
+            icon
           })
         } else if (c.type === 'folder') {
           getUrlData(c, folder ? folder + ' - ' + c.name : c.name)
@@ -209,7 +206,9 @@ window.exports = {
                 // console.log(x.pinyin)
                 // console.log(x.pinyin.includes(regexText),regexText)
                 return x.title.search(searchRegex) !== -1 ||
-                x.description.search(searchRegex) !== -1||x.pinyin.some(i=>i.includes(regexText))}
+                x.description.search(searchRegex) !== -1||
+                match(x.title,regexText)||match(x.description,regexText)
+              }
             )
           )
         }
