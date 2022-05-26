@@ -2,7 +2,7 @@ const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
 const settingConfig = require('./setting.js')
-const  { match } =require('./lib/pinyin-pro/dist/index.cjs.js')
+const { pinyin } = require('./lib/pinyin-pro/dist/index.cjs.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
@@ -37,7 +37,12 @@ function getBookmarks(dataDir, browser) {
             description: (folder ? '「' + folder + '」' : '') + c.url,
             url: c.url,
             browser,
-            icon
+            icon,
+            pinyin: [
+              pinyin(c.name, { toneType: 'none' }), //全拼
+              pinyin(c.name, { pattern: 'initial' }), //声母
+              pinyin(c.name, { pattern: 'first' }), //拼音首字母
+            ],
           })
         } else if (c.type === 'folder') {
           getUrlData(c, folder ? folder + ' - ' + c.name : c.name)
@@ -123,7 +128,10 @@ function getTargetData(keyword) {
     return targetUrlData
   }
   const defaultUrl = targetUrlData[0].url
-  const targetUrl = decodeURIComponent(defaultUrl).replace(/{{query}}/g, keyword.trim())
+  const targetUrl = decodeURIComponent(defaultUrl).replace(
+    /{{query}}/g,
+    keyword.trim()
+  )
   return [
     {
       ...targetUrlData[0],
@@ -201,15 +209,15 @@ window.exports = {
           const regexText = searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
           const searchRegex = new RegExp(regexText, 'i')
           return callbackSetList(
-            bookmarksDataCache.filter(
-              (x) =>{
-                // console.log(x.pinyin)
-                // console.log(x.pinyin.includes(regexText),regexText)
-                return x.title.search(searchRegex) !== -1 ||
-                x.description.search(searchRegex) !== -1||
-                match(x.title,regexText)||match(x.description,regexText)
-              }
-            )
+            bookmarksDataCache.filter((x) => {
+              // console.log(x.pinyin)
+              // console.log(x.pinyin.includes(regexText),regexText)
+              return (
+                x.title.search(searchRegex) !== -1 ||
+                x.description.search(searchRegex) !== -1 ||
+                x.pinyin.some((i) => i&&i.replace(/\s/g, '').includes(regexText))
+              )
+            })
           )
         }
       },

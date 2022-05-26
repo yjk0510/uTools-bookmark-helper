@@ -57,6 +57,6 @@ module.exports = {
       fs: false,
     },
   },
-  plugins: [new BundleAnalyzerPlugin()],
+  // plugins: [new BundleAnalyzerPlugin()],
   target: 'node',
 }
