@@ -4,9 +4,9 @@
   "description": "My webpack project",
   "main": "preload.js",
   "scripts": {
-    "build:prod": "webpack --mode=production --node-env=production",
+    "build:prod": "./build.sh && webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "start": "webpack --mode=development -w",
+    "start": "./build.sh && webpack --mode=development -w",
     "dev": "webpack serve --config=webpack.config.dev.js"
   },
   "repository": {
