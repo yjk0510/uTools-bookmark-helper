@@ -7,7 +7,8 @@
     "build:prod": "./build.sh && webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "start": "./build.sh && webpack --mode=development -w",
-    "dev": "webpack serve --config=webpack.config.dev.js"
+    "dev": "webpack serve --config=webpack.config.dev.js",
+    "changeLog":"./autoTag.sh"
   },
   "repository": {
     "type": "git",
