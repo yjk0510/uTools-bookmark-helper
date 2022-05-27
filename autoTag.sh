@@ -1,6 +1,6 @@
 #!/bin/bash 
-echo "#ChangeLog" > "ChangeLog.md"
+echo "# CHANGELOG" > "CHANGELOG.md"
 for tag in `git tag -l`;do
-  echo "##${tag}" >> "ChangeLog.md"
-  git show ${tag} | grep -Eo "(fix|feat|build):\s?.*\b" | xargs echo >> "ChangeLog.md"
+  echo "## ${tag}" >> "CHANGELOG.md"
+  git show ${tag} | grep -Eo "(fix|feat|build):\s?.*\b" | xargs echo >> "CHANGELOG.md"
 done
