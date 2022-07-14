@@ -1,17 +1,20 @@
 {
   "preload": "preload.js",
+  "pluginName": "Chrome 小助手",
   "logo": "./assets/logo.png",
   "platform": ["win32", "darwin"],
   "features": [
     {
       "code": "bookmarks-search",
+      "label": "书签小助手",
       "explain": "Chrome、Edge 书签搜索",
-      "cmds": ["bookmark"]
+      "cmds": ["书签小助手", "bookmark"]
     },
     {
       "code": "bookmark-setting",
+      "label": "书签小助手-设置",
       "explain": "Chrome、Edge 书签搜索设置",
-      "cmds": ["Setting"]
+      "cmds": ["Setting", "书签小助手-设置"]
     }
   ]
 }

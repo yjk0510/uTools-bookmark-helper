@@ -215,7 +215,9 @@ window.exports = {
               return (
                 x.title.search(searchRegex) !== -1 ||
                 x.description.search(searchRegex) !== -1 ||
-                x.pinyin.some((i) => i&&i.replace(/\s/g, '').includes(regexText))
+                x.pinyin.some(
+                  (i) => i && i.replace(/\s/g, '').includes(regexText)
+                )
               )
             })
           )
