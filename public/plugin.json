@@ -6,12 +6,14 @@
   "features": [
     {
       "code": "bookmarks-search",
+      "icon": "./assets/logo.png",
       "label": "书签小助手",
       "explain": "Chrome、Edge 书签搜索",
       "cmds": ["书签小助手", "bookmark"]
     },
     {
       "code": "bookmark-setting",
+      "icon": "./assets/logo.png",
       "label": "书签小助手-设置",
       "explain": "Chrome、Edge 书签搜索设置",
       "cmds": ["Setting", "书签小助手-设置"]

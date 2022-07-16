@@ -6,12 +6,13 @@ const { pinyin } = require('./lib/pinyin-pro/dist/index.cjs.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
-const bookmark_file_path = utools.dbStorage.getItem(
-  `${_id}/bookmark_helper-File_Path`
-)
 let bookmarksDataCache = null
 let targetUrlData = []
+let isCopyMode = false
 function getBookmarks(dataDir, browser) {
+  const bookmark_file_path = utools.dbStorage.getItem(
+    `${_id}/bookmark_helper-File_Path`
+  )
   let bookmarkPath = ''
   if (bookmark_file_path) {
     bookmarkPath = bookmark_file_path
@@ -140,6 +141,16 @@ function getTargetData(keyword) {
     },
   ]
 }
+const supportCopyMode = () => {
+  document.onkeydown = (e) => {
+    if (e.code == 'Enter') return
+    if (e.code == 'ArrowRight') {
+      isCopyMode = true
+    } else {
+      isCopyMode = false
+    }
+  }
+}
 window.exports = {
   'bookmarks-search': {
     mode: 'list',
@@ -147,7 +158,7 @@ window.exports = {
       enter: (action, callbackSetList) => {
         bookmarksDataCache = []
         let chromeDataDir
-        let edgeDataDir
+        supportCopyMode()
         //移除设置页面内容
         document.getElementById('setting_root') &&
           document.getElementById('setting_root').remove()
@@ -161,8 +172,6 @@ window.exports = {
             window.utools.getPath('appData'),
             'Google/Chrome'
           )
-        } else {
-          return
         }
         if (fs.existsSync(chromeDataDir)) {
           console.log(chromeDataDir)
@@ -237,6 +246,12 @@ window.exports = {
           queryName = ''
         }
         if (isLocked) return
+        if (isCopyMode) {
+          window.utools.copyText(itemData.url)
+          window.utools.showNotification('复制完成~')
+          window.utools.outPlugin()
+          return
+        }
         if (itemData.browser === 'chrome') {
           openUrlByChrome(itemData.url)
         } else {
