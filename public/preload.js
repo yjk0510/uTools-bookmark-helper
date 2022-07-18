@@ -144,7 +144,7 @@ function getTargetData(keyword) {
 const supportCopyMode = () => {
   document.onkeydown = (e) => {
     if (e.code == 'Enter') return
-    if (e.code == 'ArrowRight') {
+    if (e.code == 'ArrowLeft') {
       isCopyMode = true
     } else {
       isCopyMode = false
@@ -158,6 +158,7 @@ window.exports = {
       enter: (action, callbackSetList) => {
         bookmarksDataCache = []
         let chromeDataDir
+        isCopyMode = false
         supportCopyMode()
         //移除设置页面内容
         document.getElementById('setting_root') &&
