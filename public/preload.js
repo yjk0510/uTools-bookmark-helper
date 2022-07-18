@@ -249,8 +249,9 @@ window.exports = {
         if (isLocked) return
         if (isCopyMode) {
           window.utools.copyText(itemData.url)
+          // window.utools.outPlugin()
+          utools.hideMainWindow()
           window.utools.showNotification('复制完成~')
-          window.utools.outPlugin()
           return
         }
         if (itemData.browser === 'chrome') {
