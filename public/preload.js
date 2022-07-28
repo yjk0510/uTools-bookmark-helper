@@ -259,6 +259,7 @@ window.exports = {
         } else {
           openUrlByEdge(itemData.url)
         }
+        utools.hideMainWindow()
         window.utools.outPlugin()
       },
       placeholder: '输入关键字，检索书签',
