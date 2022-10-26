@@ -54,6 +54,11 @@ const Setting: React.FC<IProps> = (props) => {
     setValue(newValue)
     utools.dbStorage.setItem(BookMark_File_Path, newValue)
   }
+  const handleDelete=(index:number)=>()=>{
+    const newValue=[...value.slice(0,index),...value.slice(index+1)]
+    setValue(newValue)
+    utools.dbStorage.setItem(BookMark_File_Path, newValue)
+  }
   const handleQuit = () => {
     utools.redirect('bookmark', '')
   }
@@ -84,17 +89,14 @@ const Setting: React.FC<IProps> = (props) => {
                   label={`配置文件 ${index + 1}：${item}`}
                   color="success"
                 />
-                <label htmlFor="contained-button-file">
-                  <Input
-                    id="contained-button-file"
-                    onClick={handleClick(index)}
-                    type="file"
-                  />
+                <label >
+                 
                   <Button
                     variant="outlined"
                     component="span"
+                    onClick={handleDelete(index)}
                     sx={{ marginLeft: item ? 1 : 0 }}>
-                    {item ? '重新选择' : '请选择你的书签文件'}
+                    {'删除'}
                   </Button>
                 </label>
               </Box>
