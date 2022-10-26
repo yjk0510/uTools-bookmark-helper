@@ -89,8 +89,6 @@ const Setting: React.FC<IProps> = (props) => {
                   label={`配置文件 ${index + 1}：${item}`}
                   color="success"
                 />
-                <label >
-                 
                   <Button
                     variant="outlined"
                     component="span"
@@ -98,20 +96,16 @@ const Setting: React.FC<IProps> = (props) => {
                     sx={{ marginLeft: item ? 1 : 0 }}>
                     {'删除'}
                   </Button>
-                </label>
               </Box>
             </>
           )
         })}
         <Box sx={{ p: 2 }}>
           <label htmlFor="add-file-button">
-            <Input
-              id="add-file-button"
-              onClick={handleClick(value?.length || 0)}
-              type="file"
-            />
+           
             <Button
               variant="outlined"
+              onClick={handleClick(value?.length || 0)}
               component="span"
               sx={{ marginLeft: value ? 1 : 0 }}>
               {'添加的书签文件'}
