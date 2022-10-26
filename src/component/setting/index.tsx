@@ -17,17 +17,24 @@ const Wrap = styled.div`
   #contained-button-file {
     display: none;
   }
+  #add-file-button {
+    display: none;
+  }
 `
 
 import fs from 'fs'
 import { BookMark_File_Path } from '../../const'
 interface IProps {}
 const Setting: React.FC<IProps> = (props) => {
+  //兼容历史数据
+  const formatData = (data: string | string[]) => {
+    return data ? (typeof data === 'string' ? [data] : data) : []
+  }
   const [value, setValue] = useState(
-    utools.dbStorage.getItem(BookMark_File_Path)
+    formatData(utools.dbStorage.getItem(BookMark_File_Path))
   )
   const [userInfo] = useState(utools.getUser())
-  const handleClick = (event: any) => {
+  const handleClick = (index: number) => (event: any) => {
     let result = utools.showOpenDialog({
       title: '选择书签文件',
       message: '选择书签文件',
@@ -35,17 +42,22 @@ const Setting: React.FC<IProps> = (props) => {
     })
 
     let path = result![0]
+    if (value.includes(path)) return //重复地址不处理
+    let newValue = [...value]
     if (!fs.existsSync(path)) {
       alert('路径非法')
-      setValue('')
+      newValue = [...newValue.slice(0, index), '', ...newValue.slice(index + 1)]
       return
     }
-    setValue(path)
-    utools.dbStorage.setItem(BookMark_File_Path, path)
+
+    newValue = [...newValue.slice(0, index), path, ...newValue.slice(index + 1)]
+    setValue(newValue)
+    utools.dbStorage.setItem(BookMark_File_Path, newValue)
   }
   const handleQuit = () => {
     utools.redirect('bookmark', '')
   }
+  console.log(value)
 
   return (
     <>
@@ -64,19 +76,43 @@ const Setting: React.FC<IProps> = (props) => {
           />
         </Box>
         <Divider />
+        {value.map((item, index) => {
+          return (
+            <>
+              <Box sx={{ p: 2 }}>
+                <Chip
+                  label={`配置文件 ${index + 1}：${item}`}
+                  color="success"
+                />
+                <label htmlFor="contained-button-file">
+                  <Input
+                    id="contained-button-file"
+                    onClick={handleClick(index)}
+                    type="file"
+                  />
+                  <Button
+                    variant="outlined"
+                    component="span"
+                    sx={{ marginLeft: item ? 1 : 0 }}>
+                    {item ? '重新选择' : '请选择你的书签文件'}
+                  </Button>
+                </label>
+              </Box>
+            </>
+          )
+        })}
         <Box sx={{ p: 2 }}>
-          {value && <Chip label={`当前配置文件：${value}`} color="success" />}
-          <label htmlFor="contained-button-file">
+          <label htmlFor="add-file-button">
             <Input
-              id="contained-button-file"
-              onChange={handleClick}
+              id="add-file-button"
+              onClick={handleClick(value?.length || 0)}
               type="file"
             />
             <Button
               variant="outlined"
               component="span"
               sx={{ marginLeft: value ? 1 : 0 }}>
-              {value ? '重新选择' : '请选择你的书签文件'}
+              {'添加的书签文件'}
             </Button>
           </label>
         </Box>

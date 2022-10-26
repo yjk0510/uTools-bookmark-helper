@@ -26,11 +26,21 @@ function getBookmarks(dataDir, browser) {
   const bookmarksData = []
   const icon = path.join('assets', browser + '.png')
   try {
-    const data = JSON.parse(fs.readFileSync(bookmarkPath, 'utf-8'))
+    const data = []
+    debugger
+    //兼容1.0数据
+    const bookmarkPathData =
+      typeof bookmarkPath === 'string' ? [bookmarkPath] : bookmarkPath
+    bookmarkPathData.forEach((item) => {
+      data.push(JSON.parse(fs.readFileSync(item, 'utf-8')))
+    })
+
     const getUrlData = (item, folder) => {
       if (!item || !Array.isArray(item.children)) return
       item.children.forEach((c) => {
         if (c.type === 'url') {
+          if (bookmarksData.find((i) => c.name === i.title || c.url === i.url))
+            return //不重复添加
           bookmarksData.push({
             addAt: parseInt(c.date_added),
             title: c.name || '',
@@ -49,9 +59,11 @@ function getBookmarks(dataDir, browser) {
         }
       })
     }
-    getUrlData(data.roots.bookmark_bar, '')
-    getUrlData(data.roots.other, '')
-    getUrlData(data.roots.synced, '')
+    data.forEach((item) => {
+      getUrlData(item.roots.bookmark_bar, '')
+      getUrlData(item.roots.other, '')
+      getUrlData(item.roots.synced, '')
+    })
   } catch (e) {
     alert(`请重新选择书签文件,错误信息：${e}`)
   }
@@ -215,7 +227,9 @@ window.exports = {
               return (
                 x.title.search(searchRegex) !== -1 ||
                 x.description.search(searchRegex) !== -1 ||
-                x.pinyin.some((i) => i&&i.replace(/\s/g, '').includes(regexText))
+                x.pinyin.some(
+                  (i) => i && i.replace(/\s/g, '').includes(regexText)
+                )
               )
             })
           )
