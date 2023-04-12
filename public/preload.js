@@ -152,6 +152,23 @@ function getTargetData(keyword) {
     },
   ]
 }
+//模拟移动端打开
+function openInMobileDevice(url) {
+  utools.ubrowser.goto(url).device('iPhone 11').devTools('bottom').run({})
+  window.utools.hideMainWindow()
+}
+//处理移动端url
+function handleMobileUrl(url) {
+  const targetUrl = url.slice(2)
+  if (/^m:/i.test(url)) {
+    openInMobileDevice(targetUrl)
+    return
+  }
+  if (/^c:/i.test(url)) {
+    utools.copyText(targetUrl)
+    utools.showNotification(`已复制到剪贴板：${targetUrl}`)
+  }
+}
 window.exports = {
   'bookmarks-search': {
     mode: 'list',
@@ -237,25 +254,30 @@ window.exports = {
       },
       select: (action, itemData) => {
         console.log(itemData)
-        activeUrl = decodeURIComponent(itemData.url)
-        if (/{{query}}/.test(activeUrl)) {
-          isLocked = true
-          targetUrlData.push(itemData)
-          utools.setSubInputValue(`${itemData.title} `)
-          queryName = itemData.title.trim()
+        const currentUrl = itemData.url
+        const activeUrl = decodeURIComponent(currentUrl)
+        if (/^(m|c):/i.test(currentUrl)) {
+          handleMobileUrl(currentUrl)
         } else {
-          isLocked = false
-          targetUrlData = []
-          queryName = ''
+          if (/{{query}}/.test(activeUrl)) {
+            isLocked = true
+            targetUrlData.push(itemData)
+            utools.setSubInputValue(`${itemData.title} `)
+            queryName = itemData.title.trim()
+          } else {
+            isLocked = false
+            targetUrlData = []
+            queryName = ''
+          }
+          if (isLocked) return
+          if (itemData.browser === 'chrome') {
+            openUrlByChrome(currentUrl)
+          } else {
+            openUrlByEdge(currentUrl)
+          }
+          window.utools.hideMainWindow()
+          window.utools.outPlugin()
         }
-        if (isLocked) return
-        if (itemData.browser === 'chrome') {
-          openUrlByChrome(itemData.url)
-        } else {
-          openUrlByEdge(itemData.url)
-        }
-        window.utools.hideMainWindow()
-        window.utools.outPlugin()
       },
       placeholder: '输入关键字，检索书签',
     },
