@@ -2,13 +2,15 @@ const path = require('path')
 const fs = require('fs')
 const cp = require('child_process')
 const settingConfig = require('./setting.js')
-const { pinyin } = require('./lib/pinyin-pro/dist/index.cjs.js')
+const { pinyin } = require('./lib/pinyin-pro/dist/index.js')
 let isLocked = false
 const _id = utools.getNativeId()
 let queryName = ''
 const bookmark_file_path = utools.dbStorage.getItem(
   `${_id}/bookmark_helper-File_Path`
 )
+const enableClickSort = utools.dbStorage.getItem(`${_id}/bookmark_helper-Sort_Rule`)==='clickCount'
+const bookmark_click_count_map = utools.dbStorage.getItem(`${_id}/bookmark_helper-Click_Count`) ? JSON.parse(utools.dbStorage.getItem(`${_id}/bookmark_helper-Click_Count`)): {};
 let bookmarksDataCache = null
 let targetUrlData = []
 function getBookmarks(dataDir, browser) {
@@ -27,7 +29,6 @@ function getBookmarks(dataDir, browser) {
   const icon = path.join('assets', browser + '.png')
   try {
     const data = []
-    debugger
     //兼容1.0数据
     const bookmarkPathData =
       typeof bookmarkPath === 'string' ? [bookmarkPath] : bookmarkPath
@@ -43,6 +44,7 @@ function getBookmarks(dataDir, browser) {
             return //不重复添加
           bookmarksData.push({
             addAt: parseInt(c.date_added),
+            click: bookmark_click_count_map[c.url] || 0,
             title: c.name || '',
             description: (folder ? '「' + folder + '」' : '') + c.url,
             url: c.url,
@@ -167,6 +169,7 @@ function handleMobileUrl(url) {
   if (/^c:/i.test(url)) {
     utools.copyText(targetUrl)
     utools.showNotification(`已复制到剪贴板：${targetUrl}`)
+    utools.hideMainWindow()
   }
 }
 window.exports = {
@@ -200,7 +203,7 @@ window.exports = {
 
         if (bookmarksDataCache.length > 0) {
           bookmarksDataCache = bookmarksDataCache.sort(
-            (a, b) => a.addAt - b.addAt
+            (a, b) => enableClickSort?a.click-b.click:a.addAt - b.addAt
           )
         }
         callbackSetList(bookmarksDataCache)
@@ -256,6 +259,8 @@ window.exports = {
         console.log(itemData)
         const currentUrl = itemData.url
         const activeUrl = decodeURIComponent(currentUrl)
+        bookmark_click_count_map[activeUrl] = bookmark_click_count_map[activeUrl] ? bookmark_click_count_map[activeUrl] + 1 : 1;
+        console.log(bookmark_click_count_map,'click')
         if (/^(m|c):/i.test(currentUrl)) {
           handleMobileUrl(currentUrl)
         } else {
